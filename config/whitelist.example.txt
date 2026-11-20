@@ -1,0 +1,8 @@
+# knowledge-neaten · 误报治理白名单模板（whitelist.example.txt）
+#
+# 复制为 config/whitelist.txt（不进 Git）。每行一条：规则名|相对路径(glob，支持 * 与 **)
+# 命中则该文件跳过该规则。规则名：empty | duplicate | stale | broken
+# 示例：
+# stale|pages/旧计划-2024.md
+# duplicate|**/*.svg
+# broken|pages/外部引用汇总.md

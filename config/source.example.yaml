@@ -1,0 +1,30 @@
+# knowledge-neaten · 每源配置模板（source.example.yaml）
+#
+# 由 guide.py 生成到 <KM_CONFIG_HOME>/neaten/sources/<id>.yaml；本文件仅模板。
+# 每源可覆盖全局 settings.yaml 的 defaults。
+
+version: 1
+
+id: obsidian-main            # 源 id（= 报告子目录名；建议由目录路径推导）
+name: obsidian
+
+# 要体检的目录（只读；绝不写/删/移）。推荐填脱敏工作副本：
+#   <data_root>/<id>   （knowledge-desensitization 的产物）
+source: <脱敏后工作副本目录>
+
+source_kind: desensitized_workcopy   # desensitized_workcopy | raw_source
+
+stale_rules_file: stale-rules.yaml   # 覆盖全局规则文件
+
+exclude:
+  - ".git/**"
+  - ".obsidian/**"
+  - "node_modules/**"
+  - "templates/**"
+
+ai:
+  enabled: false
+  full_text: false
+
+# 运行态（脚本维护：last_scan / last_assess / report 路径）；用户不必手改。
+state: {}

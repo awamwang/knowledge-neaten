@@ -1,0 +1,15 @@
+# 运行产物（含用户路径与主题，绝不入库）
+out/
+.reports/
+.tmp/
+
+# Python
+__pycache__/
+*.pyc
+
+# 真实配置（含本机路径/私有类目）——只入库 *.example.*
+config/settings.yaml
+config/sources/
+config/stale-rules.yaml
+config/taxonomy.yaml
+config/whitelist.txt

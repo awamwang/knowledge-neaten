@@ -1,0 +1,53 @@
+# knowledge-neaten · 过期/无效判定规则（stale-rules.example.yaml）
+#
+# 复制为 config/stale-rules.yaml（不进 Git）后按需改。scan.py 缺此文件时用内置同值默认。
+# 所有阈值可调；"过期"不是一刀切，而是多信号命中后进候选，再（可选）AI 复核。
+
+version: 1
+
+# —— A 空/近空（确定性，不碰 AI）——
+empty:
+  zero_byte: true            # 0 字节文件
+  min_body_chars: 10         # 去 frontmatter/空白后正文短于此 → 近空
+
+# —— B 重复（确定性）——
+duplicate:
+  exact: true                # 归一化内容哈希相同（忽略 frontmatter 与行尾空白）
+  near: false                # 近似重复默认关（开销大、易误报）
+  similarity_threshold: 0.90 # near 开启时生效
+
+# —— C 疑似过期/失效（确定性进候选 + 可选 AI 复核）——
+stale:
+  stale_days: 365            # 信号1：mtime 超过 (today - stale_days)
+  orphan: true               # 信号2：引用图入度 = 0 视为孤立（root/索引/模板豁免）
+  scan_dates: true           # 信号3：正文含绝对日期
+  date_lookback_days: 0      # 命中早于 (today - 该值) 的日期；0 = 任意过去日期
+  require: "stale_days AND (orphan OR scan_dates)"   # 进候选门槛
+  ai_review: true            # 候选交 AI 复核，三档 suspected/likely_valid/manual
+  min_confidence: 0.6        # 仅约束 AI 结论：低于此不进报告
+  exempt_paths:              # 永不判过期的相对 glob
+    - "**/index.md"
+    - "**/README.md"
+    - "pages/主页*"
+    - "**/日志/**"           # 日志/日记类天然"过期"但应保留
+
+# —— D 断链（确定性）——
+broken_links: true           # [[链接]]/附件指向不存在目标 → 列出（不改不删）
+
+# —— E 归类建议（AI，第二期）——
+taxonomy:
+  enabled: true
+  candidates_file: taxonomy.yaml
+  max_suggestions: 3
+  ai_full_text_default: false
+
+# —— 全局排除 / 白名单 ——
+exclude:
+  - ".git/**"
+  - ".obsidian/**"
+  - ".logseq/**"
+  - "node_modules/**"
+  - "__pycache__/**"
+  - "templates/**"
+  - "**/README.md"
+whitelist_file: whitelist.txt # 形如  stale|pages/旧计划-2024.md

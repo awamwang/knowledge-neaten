@@ -1,0 +1,32 @@
+# knowledge-neaten · 全局设置模板（settings.example.yaml）
+#
+# 复制为 <KM_CONFIG_HOME>/neaten/settings.yaml 后按需修改。
+#   <KM_CONFIG_HOME> = %USERPROFILE%\.knowledge-manager-skills（可用 env 覆盖）
+# 本模板不被脚本直接读取；不进 Git。
+
+version: 1
+
+# 报告产物根：neaten-report.md + suggestions.json 落 <reports_root>/<id>/。
+# 留 null = 默认 <技能目录>/.reports（已 .gitignore）。
+reports_root: null
+
+defaults:
+  # 输入语义（仅作提示；scan 一律按"只读"处理，不写）：
+  #   desensitized_workcopy = 扫 knowledge-desensitization 的工作副本（推荐，AI 段无凭据风险）
+  #   raw_source            = 直扫原始真源（确定性段安全；AI 段有隐私成本，慎用）
+  source_kind: desensitized_workcopy
+
+  stale_rules_file: stale-rules.yaml      # 相对 <技能目录>/config 或绝对路径
+
+  ai:
+    enabled: false        # 默认 --no-ai（assess.py 第二期）
+    full_text: false      # 即便开 AI，也不默认把完整正文送进模型
+
+  exclude:
+    - ".git/**"
+    - ".obsidian/**"
+    - ".logseq/**"
+    - "node_modules/**"
+    - "__pycache__/**"
+    - "templates/**"
+    - "**/README.md"
